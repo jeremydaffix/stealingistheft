@@ -19,19 +19,27 @@ public class PlayerController : MonoBehaviour
 
     private PlayerDirection currentDirection = PlayerDirection.None;
 
+    public static PlayerController PlayerInstance = null;
+
     [SerializeField]
     private float speed = 0.1f;
+
+    private float speedBoost = 1f;
 
 
     // components
 
     Rigidbody2D rb;
+    Animator anim;
 
 
 
     void Start()
     {
+        PlayerInstance = this;
+
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -102,6 +110,16 @@ public class PlayerController : MonoBehaviour
                 currentDirection = PlayerDirection.None;
             }
         }
+
+        if(Input.GetButton("Fire3"))
+        {
+            speedBoost = 2.0f;
+        }
+
+        else
+        {
+            speedBoost = 1f;
+        }
     }
 
 
@@ -125,7 +143,21 @@ public class PlayerController : MonoBehaviour
                 moving.y = -1f;
 
 
-            rb.MovePosition(transform.position + moving * speed);
+            Vector3 newPos = transform.position + moving * speed * speedBoost;
+
+            var dir = newPos - transform.position;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            rb.SetRotation(Quaternion.AngleAxis(angle - 90f, Vector3.forward));
+
+            //transform.LookAt(newPos);
+            rb.MovePosition(newPos); ;
+
+            anim.SetBool("isWalking", true);
+        }
+
+        else
+        {
+            anim.SetBool("isWalking", false);
         }
     }
 }
