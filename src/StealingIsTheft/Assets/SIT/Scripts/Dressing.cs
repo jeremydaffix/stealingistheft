@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class Dressing : MonoBehaviour
 {
+    [SerializeField]
+    GameObject particleEffect;
+
+    [SerializeField]
+    Sprite newSprite;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +46,16 @@ public class Dressing : MonoBehaviour
 
                 // some fx
                 // change skin
+
+                SpriteRenderer spr = PlayerController.PlayerInstance.GetComponent<SpriteRenderer>();
+                spr.sprite = newSprite;
+                spr.enabled = false;
+                spr.enabled = true;
+
+                PlayerController.PlayerInstance.Anim.SetBool("isDressed", true);
+
+                //particleEffect.transform.position = PlayerController.PlayerInstance.transform.position;
+                particleEffect.SetActive(true);
 
                 Debug.LogWarning("FULLY DRESSED!");
 

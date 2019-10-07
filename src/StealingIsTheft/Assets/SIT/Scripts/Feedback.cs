@@ -95,7 +95,7 @@ public class Feedback : MonoBehaviour
     {
         Debug.LogWarning("GAME OVER");
 
-        //StartCoroutine(GameOverScreen());
+        StartCoroutine(GameOverScreen());
     }
 
     public void Victory()

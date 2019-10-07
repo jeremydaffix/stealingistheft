@@ -45,7 +45,7 @@ public class FixedKeeperController : MonoBehaviour
                     Feedback.Instance.ShowSimpleMessage(new Vector2(transform.position.x - 4f, transform.position.y + 4f), "***BEEEEEP BEEEEEEEEEP BEEEEEEP BEEEEEEEEEEP ***", new Color(1.0f, 0.5f, 0.5f), 32, 1.50f);
 
                 else if (!PlayerController.PlayerInstance.HasSunglasses)
-                    Say("What are these junkie eyes? I'm calling the police!");
+                    Say("These junkie eyes? Calling the cops!");
 
                 Feedback.Instance.GameOver();
             }

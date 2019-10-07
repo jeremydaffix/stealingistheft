@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public bool IsDrunk { get => isDrunk; set => isDrunk = value; }
     public bool IsTalking { get => isTalking; set => isTalking = value; }
     public bool IsWearingAntiTheft { get => isWearingAntiTheft; set => isWearingAntiTheft = value; }
+    public Animator Anim { get => anim; set => anim = value; }
 
 
 
@@ -92,7 +93,7 @@ public class PlayerController : MonoBehaviour
         PlayerInstance = this;
 
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        Anim = GetComponent<Animator>();
         imp = GetComponent<CinemachineImpulseSource>();
     }
 
@@ -217,12 +218,12 @@ public class PlayerController : MonoBehaviour
 
             rb.MovePosition(newPos);
 
-            anim.SetBool("isWalking", true);
+            Anim.SetBool("isWalking", true);
         }
 
         else
         {
-            anim.SetBool("isWalking", false);
+            Anim.SetBool("isWalking", false);
         }
     }
 
