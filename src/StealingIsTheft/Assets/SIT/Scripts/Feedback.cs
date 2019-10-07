@@ -10,7 +10,12 @@ public class Feedback : MonoBehaviour
     [SerializeField]
     private GameObject simpleMessagePrefab;
 
-
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private GameObject playerAction;
+    [SerializeField]
+    private TextMeshPro playerActionText;
 
     void Start()
     {
@@ -58,5 +63,20 @@ public class Feedback : MonoBehaviour
         }
 
         Destroy(tmp.gameObject);
+    }
+
+
+    public void ShowPlayerAction(string txt)
+    {
+        playerAction.transform.position = player.transform.position + new Vector3(-3f, 3f, 0f);
+
+        playerAction.SetActive(true);
+        playerActionText.text = txt;
+    }
+
+    public void HidePlayerAction()
+    {
+        playerAction.SetActive(false);
+        playerActionText.text = "";
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
     enum PlayerDirection
     {
         Left,
@@ -27,11 +28,50 @@ public class PlayerController : MonoBehaviour
     private float speedBoost = 1f;
 
 
+    // character properties
+
+    bool isStealing = false;
+
+    bool isNaked = true;
+    bool isDehydrated = true;
+    bool isHungry = true;
+    bool isDrunk = false;
+
+    bool hasShoppingCart = false;
+
+    bool hasPants = false;
+    bool hasShoes = false;
+    bool hasUnderwear = false;
+    bool hasTshirt = false;
+    bool hasJacket = false;
+    bool hasSunglasses = false;
+    bool hasHat = false;
+
+    bool hasPincers = false;
+
+
+
+    public bool IsStealing { get => isStealing; set => isStealing = value; }
+    public bool IsNaked { get => isNaked; set => isNaked = value; }
+    public bool IsDehydrated { get => isDehydrated; set => isDehydrated = value; }
+    public bool IsHungry { get => isHungry; set => isHungry = value; }
+    public bool HasPants { get => hasPants; set => hasPants = value; }
+    public bool HasShoes { get => hasShoes; set => hasShoes = value; }
+    public bool HasUnderwear { get => hasUnderwear; set => hasUnderwear = value; }
+    public bool HasTshirt { get => hasTshirt; set => hasTshirt = value; }
+    public bool HasJacket { get => hasJacket; set => hasJacket = value; }
+    public bool HasSunglasses { get => hasSunglasses; set => hasSunglasses = value; }
+    public bool HasHat { get => hasHat; set => hasHat = value; }
+    public bool HasPincers { get => hasPincers; set => hasPincers = value; }
+    public bool HasShoppingCart { get => hasShoppingCart; set => hasShoppingCart = value; }
+    public bool IsDrunk { get => isDrunk; set => isDrunk = value; }
+
+
+
     // components
 
     Rigidbody2D rb;
     Animator anim;
-
 
 
     void Start()
@@ -159,5 +199,86 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("isWalking", false);
         }
+    }
+
+
+    public bool Take(string nameObject)
+    {
+        bool objectTaken = true;
+
+        switch(nameObject)
+        {
+            case "Water":
+                IsDehydrated = false;
+                break;
+
+            case "Beer":
+                IsDehydrated = true;
+                IsDrunk = true;
+                break;
+
+            case "Crisps":
+                IsHungry = false;
+                break;
+
+            case "Raclette":
+                IsHungry = false;
+                break;
+
+            case "Aspirin":
+                IsDehydrated = false;
+                break;
+
+            case "Cough Syrup":
+                IsDehydrated = true;
+                IsDrunk = true;
+                break;
+
+            case "Metallica T-Shirt":
+                hasTshirt = true;
+                break;
+
+            case "Sneakers":
+                hasShoes = true;
+                break;
+
+            case "Top Hat":
+                hasHat = true;
+                break;
+
+            case "Underpants":
+                hasUnderwear = true;
+                break;
+
+            case "Jeans":
+                HasPants = true;
+                break;
+
+            case "Yellow Jacket":
+                hasJacket = true;
+                break;
+
+            case "Sunglasses":
+                HasSunglasses = true;
+                break;
+
+            case "Pincers":
+                hasPincers = true;
+                break;
+
+
+            default:
+                objectTaken = false;
+                break;
+        }
+
+
+        if(objectTaken)
+        {
+
+        }
+
+
+        return objectTaken;
     }
 }

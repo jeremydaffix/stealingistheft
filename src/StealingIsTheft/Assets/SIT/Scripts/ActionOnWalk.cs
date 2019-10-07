@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleMessageOnWalk : MonoBehaviour
+public class ActionOnWalk : MonoBehaviour
 {
     [SerializeField]
     private string message;
-
+    /*
     [SerializeField]
     private Vector2 position = new Vector2();
 
@@ -23,8 +23,10 @@ public class SimpleMessageOnWalk : MonoBehaviour
     bool autoDestroy = true;
 
     [SerializeField]
-    SimpleMessageOnWalk nextMessage = null;
+    SimpleMessageOnWalk nextMessage = null;*/
 
+
+    bool actionEnabled = false;
 
 
     // Start is called before the first frame update
@@ -36,30 +38,34 @@ public class SimpleMessageOnWalk : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.name == "Player")
+        if(actionEnabled)
         {
-            Debug.LogWarning(message);
-
-            Feedback.Instance.ShowSimpleMessage(position, message, color, size, duration);
-
-            if (nextMessage != null)
+            if(Input.GetButtonDown("Jump"))
             {
-                Invoke("EnableNextMessage", 5f);
+                if(PlayerController.PlayerInstance.Take(message))
+                {
+                    Destroy(gameObject);
+                }
             }
-
-            if (autoDestroy)
-                Destroy(gameObject);
         }
     }
 
-    private void EnableNextMessage() // bug: not called because object destroyed
+
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        nextMessage.gameObject.SetActive(true);
+        if(collision.gameObject.name == "Player")
+        {
+            actionEnabled = true;
+
+            Feedback.Instance.ShowPlayerAction(message);
+        }
     }
 
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        actionEnabled = false;
+
+        Feedback.Instance.HidePlayerAction();
+    }
 }
