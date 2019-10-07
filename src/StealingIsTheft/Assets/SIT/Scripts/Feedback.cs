@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Feedback : MonoBehaviour
 {
@@ -16,6 +18,15 @@ public class Feedback : MonoBehaviour
     private GameObject playerAction;
     [SerializeField]
     private TextMeshPro playerActionText;
+
+    [SerializeField]
+    private GameObject gameOverEffect;
+
+    [SerializeField]
+    private GameObject victoryEffect;
+
+    bool isGameOver = false;
+
 
     void Start()
     {
@@ -78,5 +89,65 @@ public class Feedback : MonoBehaviour
     {
         playerAction.SetActive(false);
         playerActionText.text = "";
+    }
+
+    public void GameOver()
+    {
+        Debug.LogWarning("GAME OVER");
+
+        //StartCoroutine(GameOverScreen());
+    }
+
+    public void Victory()
+    {
+        Debug.LogWarning("Victory");
+
+        if(!isGameOver)
+            StartCoroutine(VictoryScreen());
+    }
+
+
+    IEnumerator GameOverScreen()
+    {
+        isGameOver = true;
+
+        yield return new WaitForSeconds(3f);
+
+        Image img = gameOverEffect.GetComponent<Image>();
+
+        img.color = new Color(0f, 0f, 0f, 0f);
+
+        gameOverEffect.SetActive(true);
+
+        for(int i = 0; i < 20; ++i)
+        {
+            img.color = new Color(0f, 0f, 0f, i * 0.05f);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        SceneManager.LoadScene(0);
+    }
+
+    IEnumerator VictoryScreen()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        Image img = victoryEffect.GetComponent<Image>();
+
+        img.color = new Color(0f, 0f, 0f, 0f);
+
+        victoryEffect.SetActive(true);
+
+        for (int i = 0; i < 20; ++i)
+        {
+            img.color = new Color(0f, 0f, 0f, i * 0.05f);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        //yield return new WaitForSeconds(3f);
+
+        //SceneManager.LoadScene(0);
     }
 }

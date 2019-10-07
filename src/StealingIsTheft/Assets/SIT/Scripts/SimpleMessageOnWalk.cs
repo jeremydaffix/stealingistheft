@@ -43,8 +43,6 @@ public class SimpleMessageOnWalk : MonoBehaviour
     {
         if(collision.gameObject.name == "Player")
         {
-            Debug.LogWarning(message);
-
             Feedback.Instance.ShowSimpleMessage(position, message, color, size, duration);
 
             if (nextMessage != null)

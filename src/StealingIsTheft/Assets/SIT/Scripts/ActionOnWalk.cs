@@ -6,25 +6,6 @@ public class ActionOnWalk : MonoBehaviour
 {
     [SerializeField]
     private string message;
-    /*
-    [SerializeField]
-    private Vector2 position = new Vector2();
-
-    [SerializeField]
-    private Color color = Color.white;
-
-    [SerializeField]
-    private int size = 48;
-
-    [SerializeField]
-    private float duration = 0.25f;
-
-    [SerializeField]
-    bool autoDestroy = true;
-
-    [SerializeField]
-    SimpleMessageOnWalk nextMessage = null;*/
-
 
     bool actionEnabled = false;
 

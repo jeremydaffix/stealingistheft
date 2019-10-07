@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -25,6 +27,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed = 0.1f;
 
+    [SerializeField]
+    GameObject shoppingList;
+
+    [SerializeField]
+    GameObject drunkEffect;
+
     private float speedBoost = 1f;
 
 
@@ -36,6 +44,7 @@ public class PlayerController : MonoBehaviour
     bool isDehydrated = true;
     bool isHungry = true;
     bool isDrunk = false;
+    bool isWearingAntiTheft = true;
 
     bool hasShoppingCart = false;
 
@@ -49,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
     bool hasPincers = false;
 
+    bool isTalking = false;
 
 
     public bool IsStealing { get => isStealing; set => isStealing = value; }
@@ -65,6 +75,8 @@ public class PlayerController : MonoBehaviour
     public bool HasPincers { get => hasPincers; set => hasPincers = value; }
     public bool HasShoppingCart { get => hasShoppingCart; set => hasShoppingCart = value; }
     public bool IsDrunk { get => isDrunk; set => isDrunk = value; }
+    public bool IsTalking { get => isTalking; set => isTalking = value; }
+    public bool IsWearingAntiTheft { get => isWearingAntiTheft; set => isWearingAntiTheft = value; }
 
 
 
@@ -72,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rb;
     Animator anim;
+    CinemachineImpulseSource imp;
 
 
     void Start()
@@ -80,11 +93,15 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        imp = GetComponent<CinemachineImpulseSource>();
     }
 
     void Update()
     {
         CalcDirection();
+
+        if (Input.GetKey(KeyCode.Escape))
+            Application.Quit();
     }
 
     void FixedUpdate()
@@ -151,7 +168,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(Input.GetButton("Fire3"))
+        if(Input.GetButton("Fire3") && !isDrunk && !isDehydrated)
         {
             speedBoost = 2.0f;
         }
@@ -165,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
-        if(currentDirection != PlayerDirection.None)
+        if(currentDirection != PlayerDirection.None && !IsTalking && !IsStealing)
         {
             Vector3 moving = new Vector3();
 
@@ -183,6 +200,13 @@ public class PlayerController : MonoBehaviour
                 moving.y = -1f;
 
 
+            if(isDrunk)
+            {
+                moving = moving * Random.Range(0f, 0.8f);
+                //Camera.main.transform.Rotate(new Vector3(0f, 0f, 50f));
+            }
+
+
             Vector3 newPos = transform.position + moving * speed * speedBoost;
 
             var dir = newPos - transform.position;
@@ -190,7 +214,8 @@ public class PlayerController : MonoBehaviour
             rb.SetRotation(Quaternion.AngleAxis(angle - 90f, Vector3.forward));
 
             //transform.LookAt(newPos);
-            rb.MovePosition(newPos); ;
+
+            rb.MovePosition(newPos);
 
             anim.SetBool("isWalking", true);
         }
@@ -199,6 +224,20 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("isWalking", false);
         }
+    }
+
+    IEnumerator Steal()
+    {
+        IsStealing = true;
+        yield return new WaitForSeconds(1f);
+        IsStealing = false;
+    }
+
+    IEnumerator Talk()
+    {
+        IsTalking = true;
+        yield return new WaitForSeconds(2f);
+        IsTalking = false;
     }
 
 
@@ -210,60 +249,87 @@ public class PlayerController : MonoBehaviour
         {
             case "Water":
                 IsDehydrated = false;
+                Say("I feel better, I could even run...");
                 break;
 
             case "Beer":
                 IsDehydrated = true;
                 IsDrunk = true;
+                Say("Shit, I dit it again");
+                drunkEffect.SetActive(true);
+                //imp.
                 break;
 
             case "Crisps":
                 IsHungry = false;
+                Say("Yummy yummy");
                 break;
 
             case "Raclette":
                 IsHungry = false;
+                Say("YUMMY YUMMY");
                 break;
 
             case "Aspirin":
                 IsDehydrated = false;
+                isDrunk = false;
+                Say("I feel better, I could even run...");
+                drunkEffect.SetActive(false);
                 break;
 
             case "Cough Syrup":
-                IsDehydrated = true;
+                //IsDehydrated = true;
                 IsDrunk = true;
+                Say("I feel a little tired");
+                drunkEffect.SetActive(true);
                 break;
 
             case "Metallica T-Shirt":
                 hasTshirt = true;
+                ShowShoppingListElement(4);
+                Say("Great band");
                 break;
 
             case "Sneakers":
                 hasShoes = true;
+                ShowShoppingListElement(1);
                 break;
 
             case "Top Hat":
                 hasHat = true;
+                ShowShoppingListElement(6);
+                Say("Looking like a gentleman");
                 break;
 
             case "Underpants":
                 hasUnderwear = true;
+                ShowShoppingListElement(2);
+                Say("Bye bye freedom");
                 break;
 
             case "Jeans":
                 HasPants = true;
+                ShowShoppingListElement(3);
                 break;
 
             case "Yellow Jacket":
                 hasJacket = true;
+                ShowShoppingListElement(5);
                 break;
+
 
             case "Sunglasses":
                 HasSunglasses = true;
+                if(hasSunglasses && hasPincers)
+                    ShowShoppingListElement(7);
+                    Say("No more red eyes");
                 break;
 
             case "Pincers":
                 hasPincers = true;
+                if (hasSunglasses && hasPincers)
+                    ShowShoppingListElement(7);
+                    Say("Hasta la vista anti-theft devices");
                 break;
 
 
@@ -281,4 +347,23 @@ public class PlayerController : MonoBehaviour
 
         return objectTaken;
     }
+
+
+    void ShowShoppingListElement(int index)
+    {
+        TextMeshProUGUI tmp = shoppingList.transform.GetChild(index).GetComponent<TextMeshProUGUI>();
+
+        if(tmp != null)
+        {
+            tmp.color = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1f);
+        }
+    }
+
+    public void Say(string msg)
+    {
+        Feedback.Instance.ShowSimpleMessage(new Vector2(transform.position.x, transform.position.y + 2f), msg, new Color(1f, 1f, 1f), 22, 0.75f/*, transform*/);
+        StartCoroutine(Talk());
+    }
+
+
 }

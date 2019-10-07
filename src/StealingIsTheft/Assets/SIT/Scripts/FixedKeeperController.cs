@@ -1,45 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WaypointsFree;
 
-public class MovingKeeperController : MonoBehaviour
+public class FixedKeeperController : MonoBehaviour
 {
-    WaypointsTraveler wpt;
-    Animator anim;
-
-    bool isMoving = false;
     bool isColliding = false;
-
     bool playerChope = false;
 
 
+    // Start is called before the first frame update
     void Start()
     {
-        wpt = GetComponent<WaypointsTraveler>();
-        anim = GetComponent<Animator>();
-
-
-        StartCoroutine("RandomStop");
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
+        
     }
 
     void FixedUpdate()
     {
         bool detected = CheckForPlayer();
 
-        if(detected && !playerChope)
+        if (detected && !playerChope)
         {
-            if(PlayerController.PlayerInstance.IsNaked || PlayerController.PlayerInstance.IsDrunk || PlayerController.PlayerInstance.IsStealing)
+            if (PlayerController.PlayerInstance.IsNaked || PlayerController.PlayerInstance.IsDrunk || PlayerController.PlayerInstance.IsStealing ||
+                !PlayerController.PlayerInstance.HasSunglasses || !PlayerController.PlayerInstance.HasPincers || PlayerController.PlayerInstance.IsWearingAntiTheft)
             {
                 playerChope = true;
 
-                if (PlayerController.PlayerInstance.IsStealing) Say("Thief, respect my authority!");
-                else if (PlayerController.PlayerInstance.IsNaked) Say("Hey you, why are you naked?");
-                else if (PlayerController.PlayerInstance.IsDrunk) Say("Sir, are you drunk?");
+                if (PlayerController.PlayerInstance.IsStealing)
+                    Say("Thief, respect my authority!");
+
+                else if (PlayerController.PlayerInstance.IsNaked)
+                    Say("Hey you, why are you naked?");
+
+                else if (PlayerController.PlayerInstance.IsDrunk)
+                    Say("Sir, are you drunk?");
+
+
+                else if (!PlayerController.PlayerInstance.HasPincers || PlayerController.PlayerInstance.IsWearingAntiTheft)
+                    Feedback.Instance.ShowSimpleMessage(new Vector2(transform.position.x - 4f, transform.position.y + 4f), "***BEEEEEP BEEEEEEEEEP BEEEEEEP BEEEEEEEEEEP ***", new Color(1.0f, 0.5f, 0.5f), 32, 1.50f);
+
+                else if (!PlayerController.PlayerInstance.HasSunglasses)
+                    Say("What are these junkie eyes? I'm calling the police!");
 
                 Feedback.Instance.GameOver();
             }
@@ -60,7 +66,7 @@ public class MovingKeeperController : MonoBehaviour
             return true;
         }
 
-        else if(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 2.0f)
+        else if (Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 6.0f)
         {
             return true;
         }
@@ -74,44 +80,18 @@ public class MovingKeeperController : MonoBehaviour
         Feedback.Instance.ShowSimpleMessage(new Vector2(transform.position.x, transform.position.y + 2f), msg, new Color(0.5f, 0.5f, 1f), 22, 0.75f);
     }
 
-
-
-    IEnumerator RandomStop()
-    {
-        do
-        {
-            while (isColliding)
-                yield return new WaitForEndOfFrame();
-
-            int walkPauseTime = Random.Range(1, 6);
-            wpt.Move(isMoving);
-            anim.SetBool("isWalking", isMoving);
-            yield return new WaitForSeconds(walkPauseTime);
-
-            isMoving = !isMoving;
-
-        } while (true);
-    }
-
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         isColliding = true;
-
-        wpt.Move(false);
-        anim.SetBool("isWalking", false);
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
         isColliding = false;
-
-        wpt.Move(isMoving);
-        anim.SetBool("isWalking", isMoving);
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        
+
     }
 }
