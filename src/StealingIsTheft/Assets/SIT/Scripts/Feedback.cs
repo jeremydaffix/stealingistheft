@@ -99,9 +99,9 @@ public class Feedback : MonoBehaviour
     {
         Debug.LogWarning("GAME OVER");
 
-        //StartCoroutine(GameOverScreen());
+        StartCoroutine(GameOverScreen());
 
-        if(tr != null)
+        if (tr != null)
         {
             //vcam.Follow = tr;
             //vcam.LookAt = tr;
@@ -112,7 +112,7 @@ public class Feedback : MonoBehaviour
     {
         Debug.LogWarning("Victory");
 
-        if(!isGameOver)
+        if (!isGameOver)
             StartCoroutine(VictoryScreen());
     }
 
@@ -122,6 +122,8 @@ public class Feedback : MonoBehaviour
         isGameOver = true;
 
         yield return new WaitForSeconds(3f);
+
+        SoundSystem.inst.PlayMusicGameOver();
 
         Image img = gameOverEffect.GetComponent<Image>();
         TextMeshProUGUI tmp1 = gameOverEffect.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -150,7 +152,11 @@ public class Feedback : MonoBehaviour
     {
         PlayerController.PlayerInstance.Say("Freeeedoooom");
 
+        SoundSystem.inst.PlayWin();
+
         yield return new WaitForSeconds(1.5f);
+
+        SoundSystem.inst.PlayMusicWin();
 
         Image img = victoryEffect.GetComponent<Image>();
         TextMeshProUGUI tmp1 = victoryEffect.transform.GetChild(0).GetComponent<TextMeshProUGUI>();

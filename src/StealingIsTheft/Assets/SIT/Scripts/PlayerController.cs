@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
 
     private float speedBoost = 1f;
 
+    float lastCollisionSound = 0f;
+
 
     // character properties
 
@@ -251,6 +253,7 @@ public class PlayerController : MonoBehaviour
             case "Water":
                 IsDehydrated = false;
                 Say("I feel better, I could even run...");
+                SoundSystem.inst.PlayBoost();
                 break;
 
             case "Beer":
@@ -258,17 +261,19 @@ public class PlayerController : MonoBehaviour
                 IsDrunk = true;
                 Say("Shit, I dit it again");
                 drunkEffect.SetActive(true);
-                //imp.
+                SoundSystem.inst.PlayDrink();
                 break;
 
             case "Crisps":
                 IsHungry = false;
                 Say("Yummy yummy");
+                SoundSystem.inst.PlayEat();
                 break;
 
             case "Raclette":
                 IsHungry = false;
                 Say("YUMMY YUMMY");
+                SoundSystem.inst.PlayEat();
                 break;
 
             case "Aspirin":
@@ -276,6 +281,7 @@ public class PlayerController : MonoBehaviour
                 isDrunk = false;
                 Say("I feel better, I could even run...");
                 drunkEffect.SetActive(false);
+                SoundSystem.inst.PlayBoost();
                 break;
 
             case "Cough Syrup":
@@ -283,54 +289,71 @@ public class PlayerController : MonoBehaviour
                 IsDrunk = true;
                 Say("I feel a little tired");
                 drunkEffect.SetActive(true);
+                SoundSystem.inst.PlaySleep();
                 break;
 
             case "Metallica T-Shirt":
                 hasTshirt = true;
                 ShowShoppingListElement(4);
                 Say("Great band");
+                SoundSystem.inst.PlayTake();
                 break;
 
             case "Sneakers":
                 hasShoes = true;
                 ShowShoppingListElement(1);
+                SoundSystem.inst.PlayTake();
                 break;
 
             case "Top Hat":
                 hasHat = true;
                 ShowShoppingListElement(6);
                 Say("Looking like a gentleman");
+                SoundSystem.inst.PlayTake();
                 break;
 
             case "Underpants":
                 hasUnderwear = true;
                 ShowShoppingListElement(2);
-                Say("Bye bye freedom");
+                //Say("Bye bye freedom");
+                SoundSystem.inst.PlayTake();
                 break;
 
             case "Jeans":
                 HasPants = true;
                 ShowShoppingListElement(3);
+                SoundSystem.inst.PlayTake();
                 break;
 
             case "Yellow Jacket":
                 hasJacket = true;
                 ShowShoppingListElement(5);
+                SoundSystem.inst.PlayTake();
                 break;
 
 
             case "Sunglasses":
+
                 HasSunglasses = true;
+
                 if(hasSunglasses && hasPincers)
                     ShowShoppingListElement(7);
-                    Say("No more red eyes");
+
+                Say("No more red eyes");
+                SoundSystem.inst.PlayTake();
+
                 break;
 
             case "Pincers":
+
                 hasPincers = true;
+
                 if (hasSunglasses && hasPincers)
                     ShowShoppingListElement(7);
-                    Say("Hasta la vista anti-theft devices");
+
+                Say("Hasta la vista anti-theft devices");
+                SoundSystem.inst.PlayTake();
+
                 break;
 
 
@@ -342,7 +365,7 @@ public class PlayerController : MonoBehaviour
 
         if(objectTaken)
         {
-
+            //SoundSystem.inst.PlayTake();
         }
 
 
@@ -367,4 +390,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if((Time.time - lastCollisionSound) > 0.5f)
+        {
+            SoundSystem.inst.PlayCollision();
+            lastCollisionSound = Time.time;
+        }
+    }
 }

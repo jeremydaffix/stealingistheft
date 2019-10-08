@@ -36,13 +36,17 @@ public class Intro : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        //yield return new WaitForSeconds(1f);
+        SoundSystem.inst.PlayMusicBegin();
+
+        yield return new WaitForSeconds(0.7f);
 
         for (int i = 0; i < txt2.Length; ++i)
         {
             tmp2.text += txt2[i];
-            yield return new WaitForSeconds(0.035f);
+            yield return new WaitForSeconds(0.030f);
         }
+
+        SoundSystem.inst.StopMusic();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -55,11 +59,15 @@ public class Intro : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        //yield return new WaitForSeconds(0.5f);
-
-
         gameObject.SetActive(false);
 
+
+        SoundSystem.inst.PlayMusicGame();
+
+        //yield return new WaitForSeconds(1.0f);
+
+        SoundSystem.inst.PlayBegin();
         PlayerController.PlayerInstance.Say("What the hell is going on?");
+
     }
 }

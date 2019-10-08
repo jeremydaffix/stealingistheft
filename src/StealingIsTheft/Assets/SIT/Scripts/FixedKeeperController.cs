@@ -30,6 +30,7 @@ public class FixedKeeperController : MonoBehaviour
                 !PlayerController.PlayerInstance.HasSunglasses || !PlayerController.PlayerInstance.HasPincers || PlayerController.PlayerInstance.IsWearingAntiTheft)
             {
                 playerChope = true;
+                bool alarm = false;
 
                 if (PlayerController.PlayerInstance.IsStealing)
                     Say("Thief, respect my authority!");
@@ -42,10 +43,17 @@ public class FixedKeeperController : MonoBehaviour
 
 
                 else if (!PlayerController.PlayerInstance.HasPincers || PlayerController.PlayerInstance.IsWearingAntiTheft)
+                {
                     Feedback.Instance.ShowSimpleMessage(new Vector2(transform.position.x - 4f, transform.position.y + 4f), "***BEEEEEP BEEEEEEEEEP BEEEEEEP BEEEEEEEEEEP ***", new Color(1.0f, 0.5f, 0.5f), 32, 1.50f);
+                    SoundSystem.inst.PlayAlarm();
+                    alarm = true;
+                }
 
                 else if (!PlayerController.PlayerInstance.HasSunglasses)
                     Say("These junkie eyes? Calling the cops!");
+
+                if(!alarm)
+                    SoundSystem.inst.PlayKeeper();
 
                 Feedback.Instance.GameOver(transform);
             }

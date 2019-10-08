@@ -57,6 +57,8 @@ public class Dressing : MonoBehaviour
 
                 particleEffect.SetActive(true);
 
+                SoundSystem.inst.PlayDress();
+
                 Destroy(gameObject);
             }
         }
