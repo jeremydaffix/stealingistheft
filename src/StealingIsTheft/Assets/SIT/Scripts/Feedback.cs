@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,9 @@ public class Feedback : MonoBehaviour
 
     [SerializeField]
     private GameObject victoryEffect;
+
+    [SerializeField]
+    private CinemachineVirtualCamera vcam;
 
     bool isGameOver = false;
 
@@ -91,11 +95,17 @@ public class Feedback : MonoBehaviour
         playerActionText.text = "";
     }
 
-    public void GameOver()
+    public void GameOver(Transform tr = null)
     {
         Debug.LogWarning("GAME OVER");
 
-        StartCoroutine(GameOverScreen());
+        //StartCoroutine(GameOverScreen());
+
+        if(tr != null)
+        {
+            //vcam.Follow = tr;
+            //vcam.LookAt = tr;
+        }
     }
 
     public void Victory()
@@ -114,6 +124,8 @@ public class Feedback : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         Image img = gameOverEffect.GetComponent<Image>();
+        TextMeshProUGUI tmp1 = gameOverEffect.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI tmp2 = gameOverEffect.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
 
         img.color = new Color(0f, 0f, 0f, 0f);
 
@@ -122,19 +134,27 @@ public class Feedback : MonoBehaviour
         for(int i = 0; i < 20; ++i)
         {
             img.color = new Color(0f, 0f, 0f, i * 0.05f);
+            tmp1.color = new Color(tmp1.color.r, tmp1.color.g, tmp1.color.b, i * 0.05f);
+            tmp2.color = new Color(tmp2.color.r, tmp2.color.g, tmp2.color.b, i * 0.05f);
+
             yield return new WaitForSeconds(0.05f);
         }
 
         yield return new WaitForSeconds(3f);
+
 
         SceneManager.LoadScene(0);
     }
 
     IEnumerator VictoryScreen()
     {
-        yield return new WaitForSeconds(0.5f);
+        PlayerController.PlayerInstance.Say("Freeeedoooom");
+
+        yield return new WaitForSeconds(1.5f);
 
         Image img = victoryEffect.GetComponent<Image>();
+        TextMeshProUGUI tmp1 = victoryEffect.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI tmp2 = victoryEffect.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
 
         img.color = new Color(0f, 0f, 0f, 0f);
 
@@ -143,6 +163,9 @@ public class Feedback : MonoBehaviour
         for (int i = 0; i < 20; ++i)
         {
             img.color = new Color(0f, 0f, 0f, i * 0.05f);
+            tmp1.color = new Color(tmp1.color.r, tmp1.color.g, tmp1.color.b, i * 0.05f);
+            tmp2.color = new Color(tmp2.color.r, tmp2.color.g, tmp2.color.b, i * 0.05f);
+
             yield return new WaitForSeconds(0.05f);
         }
 

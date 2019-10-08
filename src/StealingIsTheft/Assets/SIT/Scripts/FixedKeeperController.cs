@@ -47,7 +47,7 @@ public class FixedKeeperController : MonoBehaviour
                 else if (!PlayerController.PlayerInstance.HasSunglasses)
                     Say("These junkie eyes? Calling the cops!");
 
-                Feedback.Instance.GameOver();
+                Feedback.Instance.GameOver(transform);
             }
         }
     }
@@ -55,9 +55,9 @@ public class FixedKeeperController : MonoBehaviour
     bool CheckForPlayer()
     {
         int layerMask = ~(1 << gameObject.layer);
-        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 15f, layerMask);
-        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, new Vector2(-0.5f, 0.5f), 15f, layerMask);
-        RaycastHit2D hit3 = Physics2D.Raycast(transform.position, new Vector2(0.5f, 0.5f), 15f, layerMask);
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 10f, layerMask);
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, new Vector2(-0.5f, 0.5f), 10f, layerMask);
+        RaycastHit2D hit3 = Physics2D.Raycast(transform.position, new Vector2(0.5f, 0.5f), 10f, layerMask);
 
         if ((hit1.collider != null && hit1.collider.name == "Player") ||
             (hit2.collider != null && hit2.collider.name == "Player") ||
@@ -66,7 +66,7 @@ public class FixedKeeperController : MonoBehaviour
             return true;
         }
 
-        else if (Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 6.0f)
+        else if (Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 5.0f)
         {
             return true;
         }

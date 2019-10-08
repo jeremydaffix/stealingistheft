@@ -33,28 +33,19 @@ public class MovingKeeperController : MonoBehaviour
 
         if(detected && !playerChope)
         {
-            if(PlayerController.PlayerInstance.IsNaked || PlayerController.PlayerInstance.IsDrunk || PlayerController.PlayerInstance.IsStealing)
-            {
-                playerChope = true;
-
-                if (PlayerController.PlayerInstance.IsStealing) Say("Thief, respect my authority!");
-                else if (PlayerController.PlayerInstance.IsNaked) Say("Hey you, why are you naked?");
-                else if (PlayerController.PlayerInstance.IsDrunk) Say("Sir, are you drunk?");
-
-                wpt.enabled = false;
-
-                Feedback.Instance.GameOver();
-            }
+            ChopePlayer();
         }
     }
 
     bool CheckForPlayer()
     {
         int layerMask = ~(1 << gameObject.layer);
-        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 12f, layerMask);
-        //RaycastHit2D hit2 = Physics2D.Raycast(transform.position, new Vector2(-0.5f, 0.5f), 5f, layerMask);
-        //RaycastHit2D hit3 = Physics2D.Raycast(transform.position, new Vector2(0.5f, 0.5f), 5f, layerMask);
-        Debug.Log(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position));
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 10f, layerMask);
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, new Vector2(-0.1f, 0.9f), 10f, layerMask);
+        RaycastHit2D hit3 = Physics2D.Raycast(transform.position, new Vector2(0.1f, 0.9f), 10f, layerMask);
+
+        //Debug.Log(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position));
+
         if ((hit1.collider != null && hit1.collider.name == "Player") /*||
             (hit2.collider != null && hit2.collider.name == "Player") ||
             (hit3.collider != null && hit3.collider.name == "Player")*/)
@@ -62,10 +53,10 @@ public class MovingKeeperController : MonoBehaviour
             return true;
         }
 
-        else if(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 4.0f)
+        /*else if(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position) < 2.5f)
         {
             return true;
-        }
+        }*/
 
         return false;
     }
@@ -85,10 +76,10 @@ public class MovingKeeperController : MonoBehaviour
             while (isColliding)
                 yield return new WaitForEndOfFrame();
 
-            int walkPauseTime = Random.Range(1, 6);
+            int walkPauseTime = Random.Range(1, 4);
             wpt.Move(isMoving);
             anim.SetBool("isWalking", isMoving);
-            yield return new WaitForSeconds(walkPauseTime);
+            yield return new WaitForSeconds(isMoving ? walkPauseTime * 2f : walkPauseTime);
 
             isMoving = !isMoving;
 
@@ -96,12 +87,42 @@ public class MovingKeeperController : MonoBehaviour
     }
 
 
+    void ChopePlayer()
+    {
+        if (PlayerController.PlayerInstance.IsNaked || PlayerController.PlayerInstance.IsDrunk || PlayerController.PlayerInstance.IsStealing)
+        {
+            playerChope = true;
+
+            if (PlayerController.PlayerInstance.IsStealing) Say("Thief, respect my authority!");
+            else if (PlayerController.PlayerInstance.IsNaked) Say("Hey you, why are you naked?");
+            else if (PlayerController.PlayerInstance.IsDrunk) Say("Sir, are you drunk?");
+
+            wpt.enabled = false;
+            isMoving = false;
+            anim.SetBool("isWalking", isMoving);
+
+            Vector3 dir = PlayerController.PlayerInstance.transform.position - transform.position;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = (Quaternion.AngleAxis(angle - 90f, Vector3.forward));
+
+            Feedback.Instance.GameOver(transform);
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         isColliding = true;
 
         wpt.Move(false);
         anim.SetBool("isWalking", false);
+
+        if(collision.gameObject.name == "Player")
+        {
+            if (!playerChope)
+            {
+                ChopePlayer();
+            }
+        }
     }
 
     void OnCollisionExit2D(Collision2D collision)

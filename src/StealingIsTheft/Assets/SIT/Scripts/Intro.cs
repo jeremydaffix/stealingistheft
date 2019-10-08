@@ -55,9 +55,11 @@ public class Intro : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
 
         gameObject.SetActive(false);
+
+        PlayerController.PlayerInstance.Say("What the hell is going on?");
     }
 }

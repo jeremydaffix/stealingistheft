@@ -27,19 +27,16 @@ public class Dressing : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("enter dressing");
+        //Debug.Log("enter dressing");
 
         if (collision.gameObject.name == "Player")
         {
             if (PlayerController.PlayerInstance.HasShoes && PlayerController.PlayerInstance.HasUnderwear && PlayerController.PlayerInstance.HasPants &&
             PlayerController.PlayerInstance.HasTshirt && PlayerController.PlayerInstance.HasJacket && PlayerController.PlayerInstance.HasHat)
             {
-                Debug.Log("dress");
-
                 if (PlayerController.PlayerInstance.HasPincers)
                 {
                     PlayerController.PlayerInstance.IsWearingAntiTheft = false;
-                    Debug.Log("no more antitheft");
                 }
 
                 PlayerController.PlayerInstance.IsNaked = false;
@@ -54,10 +51,11 @@ public class Dressing : MonoBehaviour
 
                 PlayerController.PlayerInstance.Anim.SetBool("isDressed", true);
 
-                //particleEffect.transform.position = PlayerController.PlayerInstance.transform.position;
-                particleEffect.SetActive(true);
+                particleEffect.transform.parent = null;
+                particleEffect.transform.position = PlayerController.PlayerInstance.transform.position;
+                particleEffect.transform.position += new Vector3(0f, 0f, -1f);
 
-                Debug.LogWarning("FULLY DRESSED!");
+                particleEffect.SetActive(true);
 
                 Destroy(gameObject);
             }
