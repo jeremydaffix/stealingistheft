@@ -142,8 +142,22 @@ public class Feedback : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
+        vcam.enabled = false;
+        PlayerController.PlayerInstance.GetComponent<SpriteRenderer>().enabled = false;
+        PlayerController.PlayerInstance.GetComponent<PlayerController>().enabled = false;
+        PlayerController.PlayerInstance.transform.position = new Vector3(6.24f, -3.34f, 0f);
+        Camera.main.transform.position = new Vector3(6.24f, -3.34f, -10f);
+
         yield return new WaitForSeconds(3f);
 
+        for (int k = 0; k < 20; ++k)
+        {
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 1f - k * 0.05f);
+            tmp1.color = new Color(tmp1.color.r, tmp1.color.g, tmp1.color.b, 1f - k * 0.05f);
+            tmp2.color = new Color(tmp2.color.r, tmp2.color.g, tmp2.color.b, 1f - k * 0.05f);
+
+            yield return new WaitForSeconds(0.05f);
+        }
 
         SceneManager.LoadScene(0);
     }

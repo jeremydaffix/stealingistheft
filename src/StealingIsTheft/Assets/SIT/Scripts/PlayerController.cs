@@ -89,10 +89,14 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     CinemachineImpulseSource imp;
 
+    void Awake()
+    {
+        PlayerInstance = this;
+    }
 
     void Start()
     {
-        PlayerInstance = this;
+        //PlayerInstance = this;
 
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
@@ -259,7 +263,7 @@ public class PlayerController : MonoBehaviour
             case "Beer":
                 IsDehydrated = true;
                 IsDrunk = true;
-                Say("Shit, I dit it again");
+                Say("Shit, I did it again");
                 drunkEffect.SetActive(true);
                 SoundSystem.inst.PlayDrink();
                 break;

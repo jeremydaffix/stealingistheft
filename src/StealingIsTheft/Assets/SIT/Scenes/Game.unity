@@ -1291,7 +1291,7 @@ PrefabInstance:
     - target: {fileID: 4740726543420180835, guid: f0a5e07ffe9b3b34ab0f070e126f47ea,
         type: 3}
       propertyPath: message
-      value: it fits you very well!
+      value: It fits you very well!
       objectReference: {fileID: 0}
     - target: {fileID: 4740726543420180835, guid: f0a5e07ffe9b3b34ab0f070e126f47ea,
         type: 3}
@@ -3573,7 +3573,7 @@ PrefabInstance:
     - target: {fileID: 4740726543420180835, guid: f0a5e07ffe9b3b34ab0f070e126f47ea,
         type: 3}
       propertyPath: message
-      value: sir, there is the queue!
+      value: Sir, there is the queue!
       objectReference: {fileID: 0}
     - target: {fileID: 4740726543420180835, guid: f0a5e07ffe9b3b34ab0f070e126f47ea,
         type: 3}
@@ -3750,14 +3750,14 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 10
   m_LookaheadIgnoreY: 0
-  m_XDamping: 4
-  m_YDamping: 4
-  m_ZDamping: 4
+  m_XDamping: 2.5
+  m_YDamping: 2.5
+  m_ZDamping: 2.5
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.025
-  m_DeadZoneHeight: 0.025
+  m_DeadZoneWidth: 0.1
+  m_DeadZoneHeight: 0.1
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.8
