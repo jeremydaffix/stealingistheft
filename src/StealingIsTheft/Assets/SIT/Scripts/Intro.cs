@@ -73,7 +73,11 @@ public class Intro : MonoBehaviour
         //yield return new WaitForSeconds(1.0f);
 
         SoundSystem.inst.PlayBegin();
-        PlayerController.PlayerInstance.Say("What the hell is going on?");
+
+        if(!IntroAlreadyDone)
+            PlayerController.PlayerInstance.Say("What the hell is going on?");
+        else
+            PlayerController.PlayerInstance.Say("Ah shit, here we go again");
 
         IntroAlreadyDone = true;
     }

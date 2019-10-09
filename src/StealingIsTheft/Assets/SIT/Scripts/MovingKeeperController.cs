@@ -40,15 +40,17 @@ public class MovingKeeperController : MonoBehaviour
     bool CheckForPlayer()
     {
         int layerMask = ~(1 << gameObject.layer);
-        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 10f, layerMask);
-        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, new Vector2(-0.1f, 0.9f), 10f, layerMask);
-        RaycastHit2D hit3 = Physics2D.Raycast(transform.position, new Vector2(0.1f, 0.9f), 10f, layerMask);
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.up, 11f, layerMask);
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, (Quaternion.AngleAxis(-30f, Vector3.forward) * transform.up.normalized).normalized, 6f, layerMask);
+        RaycastHit2D hit3 = Physics2D.Raycast(transform.position, (Quaternion.AngleAxis(30f, Vector3.forward) * transform.up.normalized).normalized, 6f, layerMask);
+
+        //Debug.Log(transform.up + " =   " + (Quaternion.AngleAxis(-35f, Vector3.forward) * transform.up.normalized).normalized + "    " + (Quaternion.AngleAxis(35f, Vector3.forward) * transform.up.normalized).normalized);
 
         //Debug.Log(Vector3.Distance(transform.position, PlayerController.PlayerInstance.transform.position));
 
-        if ((hit1.collider != null && hit1.collider.name == "Player") /*||
+        if ((hit1.collider != null && hit1.collider.name == "Player") ||
             (hit2.collider != null && hit2.collider.name == "Player") ||
-            (hit3.collider != null && hit3.collider.name == "Player")*/)
+            (hit3.collider != null && hit3.collider.name == "Player"))
         {
             return true;
         }

@@ -263,7 +263,7 @@ public class PlayerController : MonoBehaviour
             case "Beer":
                 IsDehydrated = true;
                 IsDrunk = true;
-                Say("Shit, I did it again");
+                Say("Oops, I did it again");
                 drunkEffect.SetActive(true);
                 SoundSystem.inst.PlayDrink();
                 break;
